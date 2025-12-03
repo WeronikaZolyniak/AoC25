@@ -53,9 +53,67 @@ void First()
     cout << res << endl;
 }
 
+//sec part
+
+bool IsIDInvalidSec(string strId)
+{
+    int idLen = strId.length();
+    for(int i = idLen; i >= 2; i--)
+    {
+        if (idLen % i != 0)
+        {
+            continue;
+        }
+
+        int lengthOfPart = idLen / i;
+        string firstPart = strId.substr(0, lengthOfPart);
+        cout << "firstPart: " << firstPart << endl;
+        bool bIsInvalid = true;
+        for(int j = lengthOfPart; j < idLen; j+= lengthOfPart)
+        {
+            string partToCompare = strId.substr(j, lengthOfPart);
+            cout << "PartToCompare: " << partToCompare << endl;
+            if(partToCompare != firstPart)
+            {
+                bIsInvalid = false;
+                break;
+            }
+        }
+
+        if (bIsInvalid)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+uint64_t AddAllInvalidIDsInRangeSec(uint64_t firstId, uint64_t secId)
+{
+    uint64_t result = 0;
+   
+    for(uint64_t i = firstId; i <= secId; i++)
+    {
+        string strI = to_string(i);
+        if(IsIDInvalidSec(strI))
+        {
+            result += i;
+        }
+    }
+    return result;
+}
+
 void Second()
 {
-   
+   uint64_t res = 0;
+    for(pair<string, string> pair : vec)
+    {
+        uint64_t firstId = stoull(pair.first);
+        uint64_t secId = stoull(pair.second);
+        res += AddAllInvalidIDsInRangeSec(firstId, secId);
+    }
+    cout << res << endl;
 }
 
 int main()
@@ -74,6 +132,8 @@ int main()
         vec.push_back(make_pair(firstId, secId));
     }
 
-    First();
+    
+    //First();
+    Second();
     
 }
