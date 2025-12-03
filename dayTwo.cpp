@@ -67,12 +67,10 @@ bool IsIDInvalidSec(string strId)
 
         int lengthOfPart = idLen / i;
         string firstPart = strId.substr(0, lengthOfPart);
-        cout << "firstPart: " << firstPart << endl;
         bool bIsInvalid = true;
         for(int j = lengthOfPart; j < idLen; j+= lengthOfPart)
         {
             string partToCompare = strId.substr(j, lengthOfPart);
-            cout << "PartToCompare: " << partToCompare << endl;
             if(partToCompare != firstPart)
             {
                 bIsInvalid = false;
