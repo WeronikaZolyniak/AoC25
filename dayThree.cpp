@@ -2,6 +2,9 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <map>
+#include <cstdint>
+#include <algorithm>
 using namespace std;
 
 vector<string> vec;
@@ -55,6 +58,74 @@ void First()
     cout << finalResult << endl;
 }
 
+uint64_t ResolveNumberForLine(string line)
+{
+    map<char, vector<int>> m;
+    for(int i = 0; i < line.length(); i++)
+    {
+        m[line[i]].push_back(i);
+        sort(m[line[i]].begin(), m[line[i]].end(), greater<int>());
+    }
+
+    char highStart = line[0];
+    int highStartIx = 0;
+    
+    for(int i = 1; i < line.length() - 12; i++)
+    {
+        if(line[i] - '0' > highStart - '0')
+        {
+            highStart = line[i];
+            highStartIx = i;
+        }
+    }
+    
+    map<int, char> mapNum;
+    for (auto it = m.rbegin(); it != m.rend(); ++it)
+    { 
+        for(int i = 0; i < it->second.size(); i++)
+        {
+            if(it->second[i] == highStartIx)
+            {
+                continue;
+            }
+            if(it->second[i] > highStartIx)
+            {
+                mapNum[it->second[i]] = it->first;
+            }
+            
+            if(mapNum.size() == 11)
+            {
+                break;
+            }
+        }
+
+        if(mapNum.size() == 11)
+        {
+            break;
+        }
+    }
+
+    string strRes = "";
+    strRes += highStart;
+    for(pair<int, char> pair : mapNum)
+    {
+        strRes += pair.second;
+    }
+    uint64_t result = stoull(strRes);
+    cout << result << endl;
+    return result;
+}
+
+void Second()
+{
+    uint64_t result = 0;
+    for (string line : vec)
+    {
+        result += ResolveNumberForLine(line);
+    }
+    cout << endl << endl << endl << result << endl;
+}
+
 int main()
 {
     ifstream file;
@@ -66,6 +137,8 @@ int main()
         vec.push_back(temp);
     }
 
-    First();
+    //First();
+    Second();
+    
     return 0;
 }
